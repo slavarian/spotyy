@@ -36,7 +36,8 @@ class Band(AbsctractDateTime):
     country = models.ForeignKey(
         to=Country,
         on_delete=models.PROTECT,
-        verbose_name='страна'
+        verbose_name='страна',
+        related_name='bands' 
     )
 
     class Meta:
@@ -51,9 +52,6 @@ class Band(AbsctractDateTime):
 
 
 class Artist(AbsctractDateTime):
-    """
-    Artist model.
-    """
     GENDER_OTHER = 0
     GENDER_FEMALE = 1
     GENDER_MALE = 2
@@ -67,7 +65,8 @@ class Artist(AbsctractDateTime):
         on_delete=models.PROTECT,
         verbose_name='группа',
         null=True,
-        blank=True
+        blank=True,
+        related_name='artists' 
     )
     user = models.OneToOneField(
         to=User,
@@ -97,8 +96,7 @@ class Artist(AbsctractDateTime):
             return 'Без имени'
 
         return f'Музыкант: {self.nickname}'
-
-
+    
 class Album(models.Model):
     """
     Album model.

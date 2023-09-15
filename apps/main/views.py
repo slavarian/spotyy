@@ -146,20 +146,14 @@ def create_song(
     pass
 
 
-def favorite(
-    request: WSGIRequest,
-    song_id: int
-) -> JsonResponse:
-    song: Song = get_object_or_404(
-        Song,
-        song_id
-    )
-    try:
-        song.is_favorite = True if song.is_favorite is False else False
-        song.save(update_fields=('is_favorite',))
-    except (
-        KeyError,
-        Song.DoesNotExist
-    ):
-        return JsonResponse({'success': False})
-    return JsonResponse({'success': True})
+class FavoriteSongView(View):
+    def post(self, request, song_id):
+        song = get_object_or_404(Song, id=song_id)
+
+        try:
+            song.is_favorite = not song.is_favorite
+            song.save(update_fields=('is_favorite',))
+        except Song.DoesNotExist:
+            return JsonResponse({'success': False})
+
+        return JsonResponse({'success': True})
